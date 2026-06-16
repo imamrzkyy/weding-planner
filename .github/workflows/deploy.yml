@@ -115,6 +115,8 @@ jobs:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+
+          CLOUDFLARED_TOKEN: ${{ secrets.CLOUDFLARED_TOKEN }}
         run: |
           PORT="${SERVER_PORT:-22}"
 
@@ -131,22 +133,27 @@ jobs:
             MYSQL_USER="${MYSQL_USER:-wo_user}" \
             MYSQL_PASSWORD="$MYSQL_PASSWORD" \
             MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD" \
-            'bash -s' <<'EOF'
+            CLOUDFLARED_TOKEN="$CLOUDFLARED_TOKEN" \
+            'bash -s' <<'REMOTE'
           set -e
 
           mkdir -p "$DEPLOY_PATH"
+          mkdir -p "$DEPLOY_PATH/mysql-init"
           cd "$DEPLOY_PATH"
 
-          cat > .env <<ENVEOF
+          cat > .env <<ENVFILE
           IMAGE_NAME=${IMAGE_NAME}:latest
           APP_PORT=${APP_PORT}
+
           MYSQL_DATABASE=${MYSQL_DATABASE}
           MYSQL_USER=${MYSQL_USER}
           MYSQL_PASSWORD=${MYSQL_PASSWORD}
           MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-          ENVEOF
 
-          cat > docker-compose.yml <<'COMPOSEEOF'
+          CLOUDFLARED_TOKEN=${CLOUDFLARED_TOKEN}
+          ENVFILE
+
+          cat > docker-compose.yml <<'COMPOSEFILE'
           services:
             app:
               image: ${IMAGE_NAME}
@@ -186,19 +193,29 @@ jobs:
               networks:
                 - wedding-planner-network
 
+            cloudflared:
+              image: cloudflare/cloudflared:latest
+              container_name: wedding-planner-cloudflared
+              command: ["tunnel", "--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
+              depends_on:
+                - app
+              restart: unless-stopped
+              networks:
+                - wedding-planner-network
+
           volumes:
             mysql_data:
 
           networks:
             wedding-planner-network:
               driver: bridge
-          COMPOSEEOF
+          COMPOSEFILE
 
           if [ -n "$GHCR_PAT" ]; then
             echo "$GHCR_PAT" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
           fi
 
           docker compose pull
-          docker compose up -d
+          docker compose up -d --remove-orphans
           docker image prune -f
-          EOF
+          REMOTE

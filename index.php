@@ -431,15 +431,26 @@ transform:translateY(0);
 <body>
     <?php
     include 'header.php';
-        
-$koneksi = new mysqli("localhost", "root", "", "wo_web");
+
+    $dbHost = getenv('DB_HOST') ?: 'localhost';
+    $dbUser = getenv('DB_USERNAME') ?: 'root';
+    $dbPass = getenv('DB_PASSWORD') ?: '';
+    $dbName = getenv('DB_DATABASE') ?: 'wo_web';
+    $dbPort = getenv('DB_PORT') ?: 3306;
+
+    $koneksi = new mysqli($dbHost, $dbUser, $dbPass, $dbName, (int) $dbPort);
+
+    if ($koneksi->connect_error) {
+        die("Koneksi database gagal: " . $koneksi->connect_error);
+    }
+
     $testimonies = $koneksi->query("
-    SELECT t.*, p.nama
-    FROM testimoni t
-    LEFT JOIN pelanggan p
-    ON t.idPelanggan = p.idPelanggan
-");
-?>
+        SELECT t.*, p.nama
+        FROM testimoni t
+        LEFT JOIN pelanggan p
+        ON t.idPelanggan = p.idPelanggan
+    ");
+    ?>
 
     <!-- Hero Section -->
     <section class="hero">
