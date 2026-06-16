@@ -177,7 +177,7 @@ include 'header_adm.php';
 
                                             <div class="mb-3">
                                                 <label>Password</label>
-                                                <input type="text"
+                                                <input type="hidden"
                                                        name="password"
                                                        class="form-control"
                                                        value="<?= $pl['password'] ?>"

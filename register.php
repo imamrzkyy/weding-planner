@@ -2,18 +2,20 @@
 include "config.php";
 session_start();
 
+$status = "";
+
 if (isset($_POST['btnRegister'])) {
 
     $nama = mysqli_real_escape_string($conn, $_POST['nama']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
     $alamat = mysqli_real_escape_string($conn, $_POST['alamat']);
     $telepon = mysqli_real_escape_string($conn, $_POST['telepon']);
 
     if ($password != $confirm_password) {
 
-        $error_message = "Konfirmasi kata sandi tidak sesuai!";
+        $status = "password_tidak_sama";
 
     } else {
 
@@ -21,7 +23,7 @@ if (isset($_POST['btnRegister'])) {
 
         if (mysqli_num_rows($check_user) > 0) {
 
-            $error_message = "Email sudah digunakan!";
+            $status = "email_digunakan";
 
         } else {
 
@@ -33,28 +35,17 @@ if (isset($_POST['btnRegister'])) {
             $last_num = intval(substr($last_id_pelanggan, 1)) + 1;
             $new_id = 'P' . str_pad($last_num, 3, '0', STR_PAD_LEFT);
 
-            $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
             $insert = mysqli_query($conn, "
                 INSERT INTO pelanggan
-                (idPelanggan, nama, email, password, alamat, telepon)
+                (idPelanggan, nama, email, password, alamat, telepon, ses_level)
                 VALUES
-                ('$new_id','$nama','$email','$password','$alamat','$telepon')
+                ('$new_id','$nama','$email','$password','$alamat','$telepon','user')
             ");
 
             if ($insert) {
-
-                echo "
-                <script>
-                    alert('Registrasi berhasil! Silakan login.');
-                    window.location.href='login.php';
-                </script>";
-                exit();
-
+                $status = "berhasil";
             } else {
-
-                $error_message = "Gagal mendaftar. Coba lagi.";
-
+                $status = "gagal";
             }
         }
     }
@@ -70,13 +61,12 @@ if (isset($_POST['btnRegister'])) {
 <title>Register - Wedding Organizer</title>
 
 <link rel="icon" type="image/jpeg" href="/w.o/assets/img/profile%20foto%20syf%20wedding%20planners.jpeg?v=999">
-
 <link rel="shortcut icon" type="image/jpeg" href="/w.o/assets/img/profile%20foto%20syf%20wedding%20planners.jpeg?v=999">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-
 body{
     background-image:url('assets/img/bg_login.jpg');
     background-size:cover;
@@ -128,11 +118,6 @@ body{
     color:white;
 }
 
-.alert{
-    padding:8px 12px;
-    font-size:14px;
-}
-
 .card-title{
     font-size:20px;
     font-weight:600;
@@ -141,99 +126,66 @@ body{
 small{
     font-size:13px;
 }
-
 </style>
 
 </head>
 <body>
 
 <div class="container">
-
     <div class="row justify-content-center align-items-center">
-
         <div class="col-lg-4 col-md-5 col-sm-8">
-
             <div class="card login-card p-3">
 
                 <div class="text-center mb-3">
-
                     <img src="assets/img/profile foto syf wedding planners.jpeg"
                          alt="Logo"
                          class="img-fluid logo-img">
-
                 </div>
 
                 <h5 class="text-center card-title mb-3">
                     Registrasi Akun
                 </h5>
 
-                <?php if(isset($error_message)){ ?>
-                    <div class="alert alert-danger">
-                        <?= $error_message ?>
-                    </div>
-                <?php } ?>
-
                 <form method="POST">
 
                     <div class="mb-2">
                         <label class="form-label">Nama Lengkap</label>
-                        <input type="text"
-                               class="form-control"
-                               name="nama"
-                               placeholder="Masukkan nama lengkap"
-                               required>
+                        <input type="text" class="form-control" name="nama"
+                               placeholder="Masukkan nama lengkap" required>
                     </div>
 
                     <div class="mb-2">
                         <label class="form-label">Email</label>
-                        <input type="email"
-                               class="form-control"
-                               name="email"
-                               placeholder="you@gmail.com"
-                               required>
+                        <input type="email" class="form-control" name="email"
+                               placeholder="you@gmail.com" required>
                     </div>
 
                     <div class="mb-2">
                         <label class="form-label">Kata Sandi</label>
-                        <input type="password"
-                               class="form-control"
-                               name="password"
-                               placeholder="Masukkan kata sandi"
-                               required>
+                        <input type="password" class="form-control" name="password"
+                               placeholder="Masukkan kata sandi" required>
                     </div>
 
                     <div class="mb-2">
                         <label class="form-label">Konfirmasi Kata Sandi</label>
-                        <input type="password"
-                               class="form-control"
-                               name="confirm_password"
-                               placeholder="Ulangi kata sandi"
-                               required>
+                        <input type="password" class="form-control" name="confirm_password"
+                               placeholder="Ulangi kata sandi" required>
                     </div>
 
                     <div class="mb-2">
                         <label class="form-label">Alamat</label>
-                        <input type="text"
-                               class="form-control"
-                               name="alamat"
-                               placeholder="Masukkan alamat"
-                               required>
+                        <input type="text" class="form-control" name="alamat"
+                               placeholder="Masukkan alamat" required>
                     </div>
 
                     <div class="mb-2">
                         <label class="form-label">No Telepon</label>
-                        <input type="tel"
-                               class="form-control"
-                               name="telepon"
-                               placeholder="081234567890"
-                               pattern="[0-9]{10,15}"
-                               required>
+                        <input type="tel" class="form-control" name="telepon"
+                               placeholder="081234567890" pattern="[0-9]{10,15}" required>
                     </div>
 
                     <div class="d-grid mt-3">
-                        <button type="submit"
-                                name="btnRegister"
-                                class="btn btn-orange">
+                        <button type="submit" name="btnRegister" class="btn btn-orange">
                             Daftar
                         </button>
                     </div>
@@ -248,12 +200,55 @@ small{
                 </form>
 
             </div>
-
         </div>
-
     </div>
-
 </div>
+
+<?php if ($status == "berhasil"): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Registrasi Berhasil!',
+    text: 'Silakan login menggunakan akun Anda.',
+    confirmButtonColor: '#F3C623'
+}).then(function() {
+    window.location.href = 'login.php';
+});
+</script>
+<?php endif; ?>
+
+<?php if ($status == "password_tidak_sama"): ?>
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Password Tidak Sama!',
+    text: 'Konfirmasi kata sandi tidak sesuai.',
+    confirmButtonColor: '#F3C623'
+});
+</script>
+<?php endif; ?>
+
+<?php if ($status == "email_digunakan"): ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Email Sudah Digunakan!',
+    text: 'Silakan gunakan email lain.',
+    confirmButtonColor: '#F3C623'
+});
+</script>
+<?php endif; ?>
+
+<?php if ($status == "gagal"): ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Registrasi Gagal!',
+    text: 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.',
+    confirmButtonColor: '#F3C623'
+});
+</script>
+<?php endif; ?>
 
 </body>
 </html>

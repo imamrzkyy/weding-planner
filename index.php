@@ -631,6 +631,8 @@ transform:translateY(0);
     </div>
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-BLUyugD7t0NiNWmy">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
     const form = document.getElementById("formPesanan");
     const paketSelect = document.getElementById("idPaket");
@@ -644,9 +646,45 @@ transform:translateY(0);
     payButton.addEventListener("click", async (e) => {
         e.preventDefault();
 
+        const idPaket = paketSelect.value;
+        const tanggalPesan = document.querySelector('[name="tanggalPesan"]').value;
+        const metodePembayaran = metodeSelect.value;
+
+        if (!idPaket) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Paket Belum Dipilih',
+                text: 'Silakan pilih paket terlebih dahulu.',
+                confirmButtonColor: '#0D0F2B'
+            });
+            return;
+        }
+
+        if (!tanggalPesan) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tanggal Acara Kosong',
+                text: 'Silakan pilih tanggal acara terlebih dahulu.',
+                confirmButtonColor: '#0D0F2B'
+            });
+            return;
+        }
+
+        if (!metodePembayaran) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Metode Pembayaran Belum Dipilih',
+                text: 'Silakan pilih metode pembayaran terlebih dahulu.',
+                confirmButtonColor: '#0D0F2B'
+            });
+            return;
+        }
+
+        updateHarga();
+
         const formData = new FormData(form);
 
-        await fetch('checkout-process.php', {
+        fetch('checkout-process.php', {
             method: 'POST',
             body: formData
         })
@@ -667,32 +705,76 @@ transform:translateY(0);
                     .then(res => res.json())
                     .then(data => {
                         if (data.status === "success") {
-                            alert("Pesanan berhasil disimpan!");
-                            window.location.href = "keranjang.php";
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Pesanan Berhasil!',
+                                text: 'Pesanan Anda berhasil disimpan.',
+                                confirmButtonColor: '#0D0F2B'
+                            }).then(() => {
+                                window.location.href = "keranjang.php";
+                            });
                         } else {
-                            alert("Gagal menyimpan pesanan: " + data.message);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: data.message,
+                                confirmButtonColor: '#0D0F2B'
+                            });
                         }
                     })
                     .catch(err => {
                         console.error("Error saat simpan:", err);
-                        alert("Terjadi kesalahan saat menyimpan pesanan.");
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan!',
+                            text: 'Gagal menyimpan pesanan.',
+                            confirmButtonColor: '#0D0F2B'
+                        });
                     });
                 },
 
                 onPending: function(result) {
                     console.log(result);
-                    alert("Pembayaran masih pending.");
+
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Pembayaran Pending',
+                        text: 'Silakan selesaikan pembayaran Anda.',
+                        confirmButtonColor: '#0D0F2B'
+                    });
                 },
 
                 onError: function(result) {
                     console.log(result);
-                    alert("Pembayaran gagal.");
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Pembayaran Gagal',
+                        text: 'Terjadi kesalahan saat pembayaran.',
+                        confirmButtonColor: '#0D0F2B'
+                    });
+                },
+
+                onClose: function() {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Pembayaran Dibatalkan',
+                        text: 'Anda menutup halaman pembayaran sebelum menyelesaikan transaksi.',
+                        confirmButtonColor: '#0D0F2B'
+                    });
                 }
             });
         })
         .catch((error) => {
             console.error("Checkout error:", error);
-            alert("Terjadi kesalahan saat proses checkout.");
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Checkout Gagal',
+                text: 'Terjadi kesalahan saat proses checkout.',
+                confirmButtonColor: '#0D0F2B'
+            });
         });
     });
 
