@@ -79,8 +79,8 @@ include 'header_adm.php';
                     <?php while($ps = $pesanan->fetch_assoc()): ?>
 
                         <?php
-                        $statusPembayaran = strtolower(trim($ps['metodePembayaran']));
-                        $statusPesanan = strtolower(trim($ps['statusPesanan']));
+                        $statusPembayaran = strtolower(trim($ps['metodePembayaran']?? ''));
+                        $statusPesanan = strtolower(trim($ps['statusPesanan']?? ''));
                         ?>
 
                         <tr style="border-bottom:1px solid #f1f5f9;">

@@ -142,12 +142,12 @@ include 'header_adm.php';
                 $indexWarna = abs(crc32($j['namaPelanggan'])) % count($daftarWarna);
                 $warna = $daftarWarna[$indexWarna];
 
-                if (strtolower($j['statusPesanan']) == 'selesai') { 
+                if (strtolower($j['statusPesanan'] ?? '') == 'selesai') { 
                     $status = 'Selesai';
                     $warna = '#16a34a';
-                } elseif (strtolower($j['metodePembayaran']) == 'dp') {
-                     $status = 'DP';
-                     $warna = '#f59e0b';
+                } elseif (strtolower($j['metodePembayaran'] ?? '') == 'dp') {
+                    $status = 'DP';
+                    $warna = '#f59e0b';
                 } else { 
                     $status = 'Diproses';
                     $warna = '#2563eb';
