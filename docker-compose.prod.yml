@@ -1,29 +1,29 @@
 services:
   app:
     image: ${IMAGE_NAME}
-    container_name: weding-planner-app
+    container_name: wedding-planner-app
     ports:
       - "${APP_PORT:-8080}:80"
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
-      DB_DATABASE: ${MYSQL_DATABASE:-wo_web}
-      DB_USERNAME: ${MYSQL_USER:-wo_user}
+      DB_DATABASE: ${MYSQL_DATABASE}
+      DB_USERNAME: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
     depends_on:
       mysql:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - weding-planner-network
+      - wedding-planner-network
 
   mysql:
     image: mysql:8.4
-    container_name: weding-planner-mysql
+    container_name: wedding-planner-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-wo_web}
-      MYSQL_USER: ${MYSQL_USER:-wo_user}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
@@ -35,11 +35,21 @@ services:
       retries: 10
     restart: unless-stopped
     networks:
-      - weding-planner-network
+      - wedding-planner-network
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: wedding-planner-cloudflared
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - wedding-planner-network
 
 volumes:
   mysql_data:
 
 networks:
-  weding-planner-network:
+  wedding-planner-network:
     driver: bridge
