@@ -3,7 +3,7 @@
 /* =========================
    API KEY
 ========================= */
-$apiKey = "AIzaSyBGHu_umHgHjmpAwjw1PG9FoYHr2tLZ6U0";
+$apiKey = getenv('GEMINI_API_KEY');
 
 /* =========================
    AMBIL PESAN USER

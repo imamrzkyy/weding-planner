@@ -105,6 +105,7 @@ jobs:
 
           DEPLOY_PATH: ${{ env.DEPLOY_PATH }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          GEMINI_API_KEY: ${{secrets.GEMINI_API_KEY}}
 
           APP_PORT: ${{ secrets.APP_PORT }}
 
@@ -149,6 +150,7 @@ jobs:
           MYSQL_USER=${MYSQL_USER}
           MYSQL_PASSWORD=${MYSQL_PASSWORD}
           MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+          GEMINI_API_KEY=${GEMINI_API_KEY}
 
           CLOUDFLARED_TOKEN=${CLOUDFLARED_TOKEN}
           ENVFILE
