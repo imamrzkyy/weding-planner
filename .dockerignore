@@ -1,0 +1,7 @@
+.git
+.github
+*.zip
+mysql_data
+node_modules
+vendor
+.env

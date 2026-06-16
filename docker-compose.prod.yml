@@ -1,0 +1,45 @@
+services:
+  app:
+    image: ${IMAGE_NAME}
+    container_name: weding-planner-app
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${MYSQL_DATABASE:-wo_web}
+      DB_USERNAME: ${MYSQL_USER:-wo_user}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - weding-planner-network
+
+  mysql:
+    image: mysql:8.4
+    container_name: weding-planner-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wo_web}
+      MYSQL_USER: ${MYSQL_USER:-wo_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - weding-planner-network
+
+volumes:
+  mysql_data:
+
+networks:
+  weding-planner-network:
+    driver: bridge
