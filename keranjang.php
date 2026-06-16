@@ -1,8 +1,17 @@
 <?php
 session_start();
 
-$koneksi = new mysqli("localhost", "root", "", "wo_web");
+$koneksi =$koneksi = new mysqli(
+    getenv('DB_HOST') ?: 'localhost',
+    getenv('DB_USERNAME') ?: 'root',
+    getenv('DB_PASSWORD') ?: '',
+    getenv('DB_DATABASE') ?: 'wo_web',
+    (int) (getenv('DB_PORT') ?: 3306)
+);
 
+if ($koneksi->connect_error) {
+    die("Koneksi database gagal: " . $koneksi->connect_error);
+}
 if ($koneksi->connect_errno) {
     die("Koneksi gagal: " . $koneksi->connect_error);
 }
