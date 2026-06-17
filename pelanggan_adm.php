@@ -73,6 +73,26 @@ $pelanggan = $conn->query("SELECT * FROM pelanggan");
 include 'header_adm.php';
 ?>
 
+<style>
+    .aksi-btn {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .aksi-btn .btn {
+        width: 80px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+</style>
+
 <section id="pelanggan">
 
     <div class="card mb-4 shadow-sm border-0">
@@ -111,18 +131,20 @@ include 'header_adm.php';
                             <td><?= $pl['alamat'] ?></td>
 
                             <td>
-                                <button 
-                                    class="btn btn-warning btn-sm text-white"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editModal<?= $pl['idPelanggan'] ?>">
-                                    Edit
-                                </button>
+                                <div class="aksi-btn">
+                                    <button 
+                                        class="btn btn-warning btn-sm text-white"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal<?= $pl['idPelanggan'] ?>">
+                                        Edit
+                                    </button>
 
-                                <a href="?hapus=<?= $pl['idPelanggan'] ?>"
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Yakin ingin menghapus pelanggan ini?')">
-                                    Hapus
-                                </a>
+                                    <a href="?hapus=<?= $pl['idPelanggan'] ?>"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Yakin ingin menghapus pelanggan ini?')">
+                                        Hapus
+                                    </a>
+                                </div>
                             </td>
 
                         </tr>

@@ -91,53 +91,70 @@ include 'header_adm.php';
         margin-right: 8px;
     }
 
-    @media (max-width: 768px) {
-        .fc .fc-toolbar {
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
-        }
+    
+     @media (max-width: 768px) {
 
-        .fc .fc-toolbar-title {
-            font-size: 18px !important;
-            text-align: center;
-        }
-
-        .fc .fc-button {
-            padding: 6px 10px !important;
-            font-size: 12px !important;
-        }
-
-        #gotoDate {
-            width: 100% !important;
-        }
-
-        .card-header .d-flex {
-            flex-direction: column;
-            align-items: stretch !important;
-        }
-
-        .card-header label {
-            margin-bottom: 6px;
-        }
-
-        #calendar {
-            padding: 10px;
-            overflow-x: auto;
-        }
-
-        .fc-view-harness {
-            min-width: 700px;
-        }
-
-        .agenda-card {
-            margin-bottom: 15px;
-        }
-
-        .modal-dialog {
-            margin: 10px;
-        }
+    .fc .fc-toolbar {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px;
     }
+
+    .fc .fc-toolbar-chunk {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 22px !important;
+        text-align: left !important;
+        margin: 5px 0 !important;
+    }
+
+    .fc .fc-button {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+    }
+
+    #gotoDate {
+        width: 100% !important;
+    }
+
+    .card-header .d-flex {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .card-header label {
+        margin-bottom: 6px;
+    }
+
+    #calendar {
+        padding: 10px;
+        overflow-x: hidden;
+    }
+
+    .fc .fc-col-header-cell-cushion,
+    .fc .fc-daygrid-day-number {
+        font-size: 12px !important;
+    }
+
+    .fc-event {
+        font-size: 10px !important;
+        padding: 3px 5px !important;
+        line-height: 1.2;
+    }
+
+    .agenda-card {
+        margin-bottom: 15px;
+    }
+
+    .modal-dialog {
+        margin: 10px;
+    }
+}
 </style>
 
 <section id="jadwal">
@@ -375,7 +392,11 @@ document.addEventListener('DOMContentLoaded', function () {
         initialView: 'dayGridMonth',
         locale: 'id',
 
-        headerToolbar: {
+        headerToolbar: window.innerWidth <= 768 ? {
+            left: 'prev,next',
+            center: 'title',
+            right: 'today'
+        } : {
             left: 'prev,next today',
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'

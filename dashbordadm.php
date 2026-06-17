@@ -127,7 +127,13 @@ include 'header_adm.php';
 }
 
 .chart-box {
-    min-height: 260px;
+    min-height: 320px;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 250px;
 }
 
 .ringkasan-chart {
@@ -189,7 +195,11 @@ include 'header_adm.php';
     }
 
     .chart-box {
-        min-height: 220px;
+        min-height: 300px;
+    }
+
+    .chart-wrapper {
+        height: 220px;
     }
 
     .ringkasan-chart {
@@ -318,7 +328,9 @@ include 'header_adm.php';
                                         </span>
                                     </div>
 
-                                    <canvas id="pesananChart<?= $tahunLoop ?>"></canvas>
+                                    <div class="chart-wrapper">
+                                        <canvas id="pesananChart<?= $tahunLoop ?>"></canvas>
+                                    </div>
 
                                 </div>
                             </div>
@@ -404,7 +416,7 @@ Object.keys(chartTahunan).forEach(tahun => {
 
         options: {
             responsive: true,
-            maintainAspectRatio: window.innerWidth > 768,
+            maintainAspectRatio: false,
 
             onClick: (e, elements) => {
                 if(elements.length > 0){
