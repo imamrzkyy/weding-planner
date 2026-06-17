@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         buttonText: {
-            today: 'Hari Ini',
+            today: 'Hari ini',
             month: 'Bulan',
             week: 'Minggu',
             day: 'Hari'
