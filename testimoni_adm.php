@@ -99,5 +99,46 @@ $testimoni = mysqli_query($conn, "
     background-color: #0D0F2B;
 }
 </style>
+<style>
+.bg-maroon {
+    background-color: #0D0F2B;
+}
 
+/* KHUSUS HP/TABLET */
+@media (max-width: 768px) {
+    section.container-fluid {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .card-body {
+        padding: 12px !important;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 850px;
+    }
+
+    table th,
+    table td {
+        font-size: 13px;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    table td:nth-child(4) {
+        white-space: normal;
+        min-width: 280px;
+    }
+
+    .btn-sm {
+        width: 100%;
+    }
+}
+</style>
 <?php include 'footer_adm.php'; ?>

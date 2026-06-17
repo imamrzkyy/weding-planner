@@ -185,6 +185,66 @@ $paket = $conn->query("SELECT * FROM paketpernikahan ORDER BY idPaket ASC");
 
 include 'header_adm.php';
 ?>
+<style>
+/* KHUSUS HP & TABLET */
+@media (max-width: 768px){
+
+    .container-fluid{
+        padding-left:10px !important;
+        padding-right:10px !important;
+    }
+
+    .card-header{
+        flex-direction:column;
+        align-items:stretch !important;
+        gap:10px;
+    }
+
+    .card-header .btn{
+        width:100%;
+    }
+
+    .table-responsive{
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+        min-width:900px;
+    }
+
+    .modal-dialog{
+        max-width:95%;
+        margin:10px auto;
+    }
+
+    .modal-body{
+        max-height:70vh;
+        overflow-y:auto;
+    }
+
+    .modal-footer{
+        flex-direction:column;
+    }
+
+    .modal-footer .btn{
+        width:100%;
+    }
+
+    .d-flex.justify-content-center.gap-2{
+        flex-direction:column;
+    }
+
+    .d-flex.justify-content-center.gap-2 .btn{
+        width:100%;
+    }
+
+    img{
+        max-width:100%;
+        height:auto;
+    }
+}
+</style>
 
 <div class="container-fluid">
 
@@ -526,5 +586,6 @@ while($p = $paket_modal->fetch_assoc()):
 </div>
 
 <?php endwhile; ?>
+
 
 <?php include 'footer_adm.php'; ?>

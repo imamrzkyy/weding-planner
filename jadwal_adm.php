@@ -90,6 +90,54 @@ include 'header_adm.php';
         display: inline-block;
         margin-right: 8px;
     }
+
+    @media (max-width: 768px) {
+        .fc .fc-toolbar {
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 18px !important;
+            text-align: center;
+        }
+
+        .fc .fc-button {
+            padding: 6px 10px !important;
+            font-size: 12px !important;
+        }
+
+        #gotoDate {
+            width: 100% !important;
+        }
+
+        .card-header .d-flex {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+
+        .card-header label {
+            margin-bottom: 6px;
+        }
+
+        #calendar {
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        .fc-view-harness {
+            min-width: 700px;
+        }
+
+        .agenda-card {
+            margin-bottom: 15px;
+        }
+
+        .modal-dialog {
+            margin: 10px;
+        }
+    }
 </style>
 
 <section id="jadwal">
@@ -106,7 +154,7 @@ include 'header_adm.php';
                     <small class="opacity-75">Pantau jadwal acara pernikahan berdasarkan tanggal pesanan.</small>
                 </div>
 
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
                     <label for="gotoDate" class="text-white fw-semibold mb-0">
                         Lompat Tanggal
                     </label>
@@ -206,7 +254,8 @@ include 'header_adm.php';
                                     <?= htmlspecialchars($agenda['nama']) ?>
                                 </div>
 
-                                <span class="badge text-white" style="background: <?= $agenda['warna'] ?>;"> <?= htmlspecialchars($agenda['status']) ?>
+                                <span class="badge text-white" style="background: <?= $agenda['warna'] ?>;">
+                                    <?= htmlspecialchars($agenda['status']) ?>
                                 </span>
                             </div>
 
@@ -317,7 +366,6 @@ include 'header_adm.php';
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function () {
 
     var calendarEl = document.getElementById('calendar');
@@ -395,7 +443,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
-
 </script>
 
 <?php include 'footer_adm.php'; ?>

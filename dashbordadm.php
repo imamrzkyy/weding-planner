@@ -93,7 +93,7 @@ $queryMetode = $conn->query("
         COUNT(*) AS total
     FROM pesanan
     WHERE YEAR(tanggalPesan) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-    AND metodePembayaran IN ('dp', 'lunas')
+    AND metodePembayaran IN ('dp', 'lunas', 'DP', 'Lunas')
     GROUP BY metodePembayaran
 ");
 
@@ -121,6 +121,88 @@ $ringkasanPaketData = $paketData;
 include 'header_adm.php';
 ?>
 
+<style>
+.dashboard-card {
+    border-radius: 20px;
+}
+
+.chart-box {
+    min-height: 260px;
+}
+
+.ringkasan-chart {
+    max-width: 280px;
+    height: 280px;
+    margin: 0 auto 25px auto;
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 15px;
+    }
+
+    .dashboard-header .btn {
+        width: 100%;
+    }
+
+    .filter-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 15px;
+    }
+
+    .filter-tahun {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100%;
+    }
+
+    .filter-tahun select {
+        width: 100%;
+    }
+
+    .filter-tahun span {
+        text-align: center;
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: 20px !important;
+    }
+
+    .stat-card h2 {
+        font-size: 28px;
+    }
+
+    .card-body {
+        padding: 18px !important;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h5 {
+        font-size: 18px;
+    }
+
+    .chart-box {
+        min-height: 220px;
+    }
+
+    .ringkasan-chart {
+        max-width: 230px;
+        height: 230px;
+    }
+
+    canvas {
+        max-width: 100% !important;
+    }
+}
+</style>
+
 <div class="container-fluid">
 
     <div class="row mb-4">
@@ -128,7 +210,7 @@ include 'header_adm.php';
             <div class="p-4 text-white rounded shadow-sm"
                  style="background: linear-gradient(135deg, #0D0F28 0%, #0D0F28 100%);">
 
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center dashboard-header">
                     <div>
                         <h2 class="fw-bold mb-1">Dashboard WO</h2>
                         <p class="mb-0 opacity-75">
@@ -147,28 +229,25 @@ include 'header_adm.php';
 
     <div class="row g-4 mb-4">
 
-        <!-- Paket -->
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-4 h-100 text-white"
-                style="border-radius:20px; background:linear-gradient(135deg,#3B82F6,#1D4ED8);">
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="card border-0 shadow-sm p-4 h-100 text-white stat-card dashboard-card"
+                style="background:linear-gradient(135deg,#4F46E5,#6366F1);">
                 <p class="mb-1 small fw-bold">PAKET</p>
                 <h2 class="fw-bold mb-0"><?= $total_paket ?></h2>
             </div>
         </div>
 
-        <!-- Pesanan -->
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-4 h-100 text-white"
-                style="border-radius:20px; background:linear-gradient(135deg,#F59E0B,#D97706);">
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="card border-0 shadow-sm p-4 h-100 text-white stat-card dashboard-card"
+                style="background: linear-gradient(135deg,#F59E0B,#FBBF24);">
                 <p class="mb-1 small fw-bold">PESANAN</p>
                 <h2 class="fw-bold mb-0"><?= $total_pesanan ?></h2>
             </div>
         </div>
 
-        <!-- Pelanggan -->
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-4 h-100 text-white"
-                style="border-radius:20px; background:linear-gradient(135deg,#10B981,#047857);">
+        <div class="col-lg-4 col-md-12 col-12">
+            <div class="card border-0 shadow-sm p-4 h-100 text-white stat-card dashboard-card"
+                style="background: linear-gradient(135deg,#8B5CF6,#A78BFA);">
                 <p class="mb-1 small fw-bold">PELANGGAN</p>
                 <h2 class="fw-bold mb-0"><?= $total_pelanggan ?></h2>
             </div>
@@ -178,15 +257,14 @@ include 'header_adm.php';
 
     <div class="row align-items-start">
 
-        <!-- STATISTIK -->
         <div class="col-lg-8 col-md-12 mb-4">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+            <div class="card border-0 shadow-sm h-100 dashboard-card">
                 <div class="card-body p-4">
 
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4 filter-header">
                         <h5 class="fw-bold mb-0">Statistik Pesanan Per Tahun</h5>
 
-                        <form method="GET" class="d-flex gap-2 align-items-center">
+                        <form method="GET" class="d-flex gap-2 align-items-center filter-tahun">
                             <select name="tahun_awal" class="form-select" onchange="this.form.submit()">
                                 <?php for($t = date('Y'); $t >= 2020; $t--){ ?>
                                     <option value="<?= $t ?>" <?= ($tahun_awal == $t) ? 'selected' : '' ?>>
@@ -210,25 +288,25 @@ include 'header_adm.php';
                     <div class="row g-3">
 
                         <?php
-                        $colChart = 'col-md-6';
+                        $colChart = 'col-md-6 col-12';
 
                         if ($jumlah_tahun == 1) {
-                            $colChart = 'col-md-12';
+                            $colChart = 'col-12';
                         }
 
                         if ($jumlah_tahun >= 9) {
-                            $colChart = 'col-md-4';
+                            $colChart = 'col-lg-4 col-md-6 col-12';
                         }
 
                         if ($jumlah_tahun >= 12) {
-                            $colChart = 'col-md-3';
+                            $colChart = 'col-lg-3 col-md-6 col-12';
                         }
                         ?>
 
                         <?php for ($tahunLoop = $tahun_awal; $tahunLoop <= $tahun_akhir; $tahunLoop++) { ?>
 
                             <div class="<?= $colChart ?>">
-                                <div class="border rounded-4 p-3 h-100 shadow-sm bg-white">
+                                <div class="border rounded-4 p-3 h-100 shadow-sm bg-white chart-box">
 
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <h6 class="fw-bold mb-0">
@@ -240,7 +318,7 @@ include 'header_adm.php';
                                         </span>
                                     </div>
 
-                                    <canvas id="pesananChart<?= $tahunLoop ?>" height="<?= ($jumlah_tahun == 1) ? '120' : '190' ?>"></canvas>
+                                    <canvas id="pesananChart<?= $tahunLoop ?>"></canvas>
 
                                 </div>
                             </div>
@@ -253,22 +331,21 @@ include 'header_adm.php';
             </div>
         </div>
 
-        <!-- RINGKASAN -->
         <div class="col-lg-4 col-md-12 mb-4">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+            <div class="card border-0 shadow-sm h-100 dashboard-card">
                 <div class="card-body p-4">
 
                     <h5 class="fw-bold mb-4">Ringkasan Sistem</h5>
 
                     <p class="fw-bold mb-2">Pesanan, Pengguna & Metode</p>
-                    <div style="max-width: 280px; height: 280px; margin: 0 auto 25px auto;">
+                    <div class="ringkasan-chart">
                         <canvas id="ringkasanUmumChart"></canvas>
                     </div>
 
                     <hr>
 
                     <p class="fw-bold mb-2">Paket Paling Banyak Dipesan</p>
-                    <div style="max-width: 280px; height: 280px; margin: 0 auto;">
+                    <div class="ringkasan-chart">
                         <canvas id="ringkasanPaketChart"></canvas>
                     </div>
 
@@ -287,7 +364,7 @@ include 'header_adm.php';
 </div>
 
 <div class="modal fade" id="detailModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -304,7 +381,6 @@ include 'header_adm.php';
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
 const namaBulan = <?= json_encode($nama_bulan) ?>;
 const chartTahunan = <?= json_encode($chartTahunan) ?>;
 const detailTahunan = <?= json_encode($detailTahunan) ?>;
@@ -328,7 +404,7 @@ Object.keys(chartTahunan).forEach(tahun => {
 
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: window.innerWidth > 768,
 
             onClick: (e, elements) => {
                 if(elements.length > 0){
@@ -380,7 +456,6 @@ Object.keys(chartTahunan).forEach(tahun => {
 
 });
 
-// CHART RINGKASAN UMUM
 const ringkasanUmum = document.getElementById('ringkasanUmumChart');
 
 new Chart(ringkasanUmum, {
@@ -413,7 +488,6 @@ new Chart(ringkasanUmum, {
     }
 });
 
-// CHART PAKET PALING BANYAK DIPESAN
 const ringkasanPaket = document.getElementById('ringkasanPaketChart');
 
 new Chart(ringkasanPaket, {
@@ -447,7 +521,6 @@ new Chart(ringkasanPaket, {
         }
     }
 });
-
 </script>
 
 <?php include 'footer_adm.php'; ?>

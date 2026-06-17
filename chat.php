@@ -3,7 +3,9 @@
 /* =========================
    API KEY
 ========================= */
-$apiKey = getenv('GEMINI_API_KEY');
+$env = parse_ini_file('.env');
+
+$apiKey = $env['GEMINI_API_KEY'];
 
 /* =========================
    AMBIL PESAN USER

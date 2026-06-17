@@ -23,13 +23,58 @@ $laporan = $conn->query("
 include 'header_adm.php';
 ?>
 
+<style>
+@media (max-width: 768px) {
+    #laporan .card-header .d-flex {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 12px;
+    }
+
+    #laporan .card-header h5 {
+        font-size: 22px;
+    }
+
+    #laporan .filter-laporan {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #laporan .filter-laporan .btn,
+    #laporan .filter-laporan input {
+        width: 100% !important;
+    }
+
+    #laporan .card-body {
+        padding: 12px !important;
+    }
+
+    #laporan .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #laporan table {
+        min-width: 900px;
+    }
+
+    #laporan table th,
+    #laporan table td {
+        font-size: 13px;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+}
+</style>
+
 <section id="laporan">
     <div class="card mb-4 shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
         <div class="card-header bg-maroon py-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-0 fw-bold text-white">Laporan Transaksi</h5>
 
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-2 filter-laporan">
                     <a href="laporan_pdf.php?bulan=<?= $bulan ?>&tahun=<?= $tahun ?>" class="btn btn-danger btn-sm fw-bold px-3">
                         <i class="bi bi-file-earmark-pdf me-1"></i> Download PDF
                     </a>
