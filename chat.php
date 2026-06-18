@@ -3,9 +3,9 @@
 /* =========================
    API KEY
 ========================= */
-$env = parse_ini_file('.env');
+// $env = parse_ini_file('.env');
 
-$apiKey = $env['NVIDIA_API_KEY'] ?? getenv('NVIDIA_API_KEY') ?: null;
+$apiKey =  getenv('NVIDIA_API_KEY') ?: null;
 
 if (!$apiKey) {
     echo "API key belum diatur.";
