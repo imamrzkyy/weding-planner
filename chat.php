@@ -96,7 +96,7 @@ $data = [
             "content" => $message
         ]
     ],
-    "max_tokens" => 1000,
+    "max_tokens" => 500,
     "temperature" => 0.7,
     "top_p" => 0.95,
     "stream" => false,
