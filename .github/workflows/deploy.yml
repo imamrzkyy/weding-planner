@@ -83,7 +83,7 @@ jobs:
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
           CLOUDFLARED_TOKEN: ${{ secrets.CLOUDFLARED_TOKEN }}
 
         run: |
@@ -101,7 +101,7 @@ jobs:
             MYSQL_DATABASE="${MYSQL_DATABASE:-wo_web}" \
             MYSQL_USER="${MYSQL_USER:-wo_user}" \
             MYSQL_PASSWORD="$MYSQL_PASSWORD" \
-            GEMINI_API_KEY="$GEMINI_API_KEY" \
+            NVIDIA_API_KEY="$NVIDIA_API_KEY" \
             CLOUDFLARED_TOKEN="$CLOUDFLARED_TOKEN" \
             'bash -s' <<'REMOTE'
           set -e
@@ -119,7 +119,7 @@ jobs:
           MYSQL_USER=${MYSQL_USER}
           MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-          GEMINI_API_KEY=${GEMINI_API_KEY}
+          NVIDIA_API_KEY=${NVIDIA_API_KEY}
 
           CLOUDFLARED_TOKEN=${CLOUDFLARED_TOKEN}
           ENVFILE
@@ -139,7 +139,7 @@ jobs:
                 DB_DATABASE: ${MYSQL_DATABASE}
                 DB_USERNAME: ${MYSQL_USER}
                 DB_PASSWORD: ${MYSQL_PASSWORD}
-                GEMINI_API_KEY: ${GEMINI_API_KEY}
+                NVIDIA_API_KEY: ${NVIDIA_API_KEY}
               restart: unless-stopped
               networks:
                 - wedding-planner-network

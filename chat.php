@@ -5,7 +5,13 @@
 ========================= */
 $env = parse_ini_file('.env');
 
-$apiKey = $_ENV['GEMINI_API_KEY'] ?? getenv('GEMINI_API_KEY') ?: null;
+$apiKey = $env['NVIDIA_API_KEY'] ?? getenv('NVIDIA_API_KEY') ?: null;
+
+if (!$apiKey) {
+    echo "API key belum diatur.";
+    exit;
+}
+
 /* =========================
    AMBIL PESAN USER
 ========================= */
@@ -17,9 +23,9 @@ if (empty($message)) {
 }
 
 /* =========================
-   MODEL GEMINI
+   NVIDIA API
 ========================= */
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=" . $apiKey;
+$url = "https://integrate.api.nvidia.com/v1/chat/completions";
 
 /* =========================
    DATA PERUSAHAAN
@@ -57,12 +63,13 @@ Instagram:
 ";
 
 /* =========================
-   PROMPT AI
+   SYSTEM PROMPT
 ========================= */
-$prompt = "
+$systemPrompt = "
 Kamu adalah customer service AI untuk SYF Wedding Organizer.
 
 Aturan menjawab:
+- jangan gunakan **
 - Gunakan bahasa Indonesia
 - Ramah dan profesional
 - Singkat tapi jelas
@@ -72,27 +79,29 @@ Aturan menjawab:
 
 Informasi perusahaan:
 $companyInfo
-
-Pertanyaan user:
-$message
 ";
 
 /* =========================
    REQUEST DATA
 ========================= */
 $data = [
-    "contents" => [
+    "model" => "deepseek-ai/deepseek-v4-flash",
+    "messages" => [
         [
-            "parts" => [
-                [
-                    "text" => $prompt
-                ]
-            ]
+            "role" => "system",
+            "content" => $systemPrompt
+        ],
+        [
+            "role" => "user",
+            "content" => $message
         ]
     ],
-    "generationConfig" => [
-        "temperature" => 0.7,
-        "maxOutputTokens" => 1000
+    "max_tokens" => 1000,
+    "temperature" => 0.7,
+    "top_p" => 0.95,
+    "stream" => false,
+    "chat_template_kwargs" => [
+        "enable_thinking" => false
     ]
 ];
 
@@ -105,7 +114,9 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Content-Type: application/json"
+    "Authorization: Bearer " . $apiKey,
+    "Content-Type: application/json",
+    "Accept: application/json"
 ]);
 
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
@@ -116,7 +127,6 @@ $response = curl_exec($ch);
    ERROR CURL
 ========================= */
 if (curl_errno($ch)) {
-
     echo "Server chatbot bermasalah.";
     curl_close($ch);
     exit;
@@ -138,7 +148,6 @@ $result = json_decode($response, true);
    ERROR API
 ========================= */
 if ($httpCode != 200 || isset($result['error'])) {
-
     echo "Chatbot sedang offline.";
     exit;
 }
@@ -146,20 +155,14 @@ if ($httpCode != 200 || isset($result['error'])) {
 /* =========================
    HASIL AI
 ========================= */
-if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+if (isset($result['choices'][0]['message']['content'])) {
+    $answer = $result['choices'][0]['message']['content'];
 
-    $answer = $result['candidates'][0]['content']['parts'][0]['text'];
-
-    // Rapikan output
     $answer = trim($answer);
-
-    // Convert enter jadi <br>
     $answer = nl2br($answer);
 
     echo $answer;
-
 } else {
-
     echo "AI tidak merespon.";
 }
 
