@@ -21,37 +21,36 @@ if (session_status() === PHP_SESSION_NONE) {
         font-family: 'Poppins', sans-serif;
         margin: 0;
         padding: 65px 0 150px 0;
+        overflow-x: hidden;
     }
 
-    /* Hero Section */
     .hero {
         background-image: url('assets/img/bg_login.jpg');
-        /* Ganti dengan background emas kamu */
-        background-size: auto;
+        background-size: cover;
         background-position: center;
-        padding: 150px 0;
+        padding: 150px 15px;
         color: #0D0F2B;
         text-align: center;
     }
 
     .hero h1 {
-    font-size: 4rem;
-    font-weight: 800;
-    color: white;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
-}
+        font-size: 4rem;
+        font-weight: 800;
+        color: white;
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+        word-break: break-word;
+    }
 
-.hero p {
-    font-size: 2rem;
-    color: white;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-}
+    .hero p {
+        font-size: 2rem;
+        color: white;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
 
-    /* Why Us Section */
     .why-us {
         background-color: #0D0F2B;
         color: white;
-        padding: 80px 0;
+        padding: 80px 15px;
         text-align: center;
     }
 
@@ -96,7 +95,6 @@ if (session_status() === PHP_SESSION_NONE) {
         color: #000 !important;
     }
 
-    /* WhatsApp Floating Button */
     .wa-button {
         position: fixed;
         bottom: 20px;
@@ -106,16 +104,6 @@ if (session_status() === PHP_SESSION_NONE) {
 
     .wa-button img {
         width: 160px;
-    }
-
-    @media (max-width: 576px) {
-        .hero h1 {
-            font-size: 2rem;
-        }
-
-        .wa-button img {
-            width: 120px;
-        }
     }
 
     .portfolio-img-wrapper {
@@ -160,271 +148,470 @@ if (session_status() === PHP_SESSION_NONE) {
         color: #0D0F2B;
     }
 
+    #carouselTestimoni {
+        position: relative;
+        padding-bottom: 70px;
+    }
 
+    #carouselTestimoni .carousel-control-prev,
+    #carouselTestimoni .carousel-control-next {
+        top: auto;
+        bottom: 0;
+        width: 50px;
+        height: 50px;
+        opacity: 1;
+    }
 
+    #carouselTestimoni .carousel-control-prev {
+        left: calc(50% - 60px);
+    }
 
-    /* TESTIMONI CAROUSEL */
-#carouselTestimoni {
-    position: relative;
-    padding-bottom: 70px;
-}
+    #carouselTestimoni .carousel-control-next {
+        right: calc(50% - 60px);
+    }
 
-#carouselTestimoni .carousel-control-prev,
-#carouselTestimoni .carousel-control-next {
-    top: auto;
-    bottom: 0;
-    width: 50px;
-    height: 50px;
-    opacity: 1;
-}
+    #carouselTestimoni .carousel-control-prev-icon,
+    #carouselTestimoni .carousel-control-next-icon {
+        background-color: #0D0F2B;
+        border-radius: 50%;
+        padding: 22px;
+        background-size: 55%;
+    }
 
-#carouselTestimoni .carousel-control-prev {
-    left: calc(50% - 60px);
-}
+    #chatBubble{
+        border:2px solid #F3C623;
+        position:fixed;
+        bottom:80px;
+        right:20px;
+        width:65px;
+        height:65px;
+        background:#0D0F2B;
+        color:white;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:28px;
+        cursor:pointer;
+        box-shadow:0 4px 15px rgba(0,0,0,0.3);
+        z-index:9999;
+        transition:0.3s;
+    }
 
-#carouselTestimoni .carousel-control-next {
-    right: calc(50% - 60px);
-}
+    #chatBubble:hover{
+        transform:scale(1.08);
+        background:#F3C623;
+        color:#0D0F2B;
+    }
 
-#carouselTestimoni .carousel-control-prev-icon,
-#carouselTestimoni .carousel-control-next-icon {
-    background-color: #0D0F2B;
-    border-radius: 50%;
-    padding: 22px;
-    background-size: 55%;
-}
+    #chatContainer{
+        position:fixed;
+        bottom:90px;
+        right:20px;
+        width:90%;
+        max-width:380px;
+        height:70vh;
+        max-height:540px;
+        background:#fff8dc;
+        border:2px solid #F3C623;
+        border-radius:22px;
+        box-shadow:0 12px 35px rgba(0,0,0,0.28);
+        display:none;
+        flex-direction:column;
+        overflow:hidden;
+        z-index:9999;
+        font-family:'Poppins', sans-serif;
+    }
 
+    .chat-header{
+        background:#0D0F2B;
+        color:#F3C623;
+        padding:16px;
+        font-size:18px;
+        font-weight:700;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
 
+    #chatClose{
+        cursor:pointer;
+        font-size:24px;
+        color:white;
+    }
 
-  /* ================= CHATBOT ================= */
+    #chatClose:hover{
+        color:#F3C623;
+    }
 
-#chatBubble{
-    border:2px solid #F3C623;
-    position:fixed;
-    bottom:80px;
-    right:20px;
-    width:65px;
-    height:65px;
-    background:#0D0F2B;
-    color:white;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:28px;
-    cursor:pointer;
-    box-shadow:0 4px 15px rgba(0,0,0,0.3);
-    z-index:9999;
-    transition:0.3s;
-}
+    #chatMessages{
+        flex:1;
+        padding:15px;
+        overflow-y:auto;
+        background:#fff8dc;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        scroll-behavior:smooth;
+    }
 
-#chatBubble:hover{
-    transform:scale(1.08);
-    background:#F3C623;
-    color:#0D0F2B;
-}
+    .user-message{
+        background:#F3C623;
+        color:#0D0F2B;
+        padding:12px 15px;
+        border-radius:16px 16px 0 16px;
+        max-width:80%;
+        align-self:flex-end;
+        font-size:14px;
+        line-height:1.6;
+        box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
 
-#chatContainer{
-    position:fixed;
-    bottom:90px;
-    right:20px;
-    width:90%;
-    max-width:380px;
-    height:70vh;
-    max-height:540px;
-    background:#fff8dc;
-    border:2px solid #F3C623;
-    border-radius:22px;
-    box-shadow:0 12px 35px rgba(0,0,0,0.28);
-    display:none;
-    flex-direction:column;
-    overflow:hidden;
-    z-index:9999;
-    font-family:'Poppins', sans-serif;
-}
+    .ai-message{
+        background:white;
+        color:#333;
+        padding:13px 15px;
+        border-radius:16px 16px 16px 0;
+        max-width:85%;
+        align-self:flex-start;
+        font-size:14px;
+        line-height:1.7;
+        box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    }
 
-.chat-header{
-    background:#0D0F2B;
-    color:#F3C623;
-    padding:16px;
-    font-size:18px;
-    font-weight:700;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+    .ai-message strong{
+        color:#0D0F2B;
+    }
 
-#chatClose{
-    cursor:pointer;
-    font-size:24px;
-    color:white;
-}
+    .typing-message{
+        background:white;
+        color:#777;
+        padding:12px 15px;
+        border-radius:16px 16px 16px 0;
+        max-width:75%;
+        align-self:flex-start;
+        font-size:14px;
+        font-style:italic;
+    }
 
-#chatClose:hover{
-    color:#F3C623;
-}
+    .faq-box{
+        background:white;
+        border-radius:15px;
+        padding:12px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    }
 
-#chatMessages{
-    flex:1;
-    padding:15px;
-    overflow-y:auto;
-    background:#fff8dc;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    scroll-behavior:smooth;
-}
+    .faq-title{
+        font-weight:700;
+        color:#0D0F2B;
+        margin-bottom:10px;
+        font-size:14px;
+    }
 
-.user-message{
-    background:#F3C623;
-    color:#0D0F2B;
-    padding:12px 15px;
-    border-radius:16px 16px 0 16px;
-    max-width:80%;
-    align-self:flex-end;
-    font-size:14px;
-    line-height:1.6;
-    box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
+    .faq-btn{
+        display:block;
+        width:100%;
+        border:none;
+        background:#fff3b0;
+        color:#0D0F2B;
+        text-align:left;
+        padding:9px 11px;
+        border-radius:10px;
+        margin-bottom:7px;
+        font-size:13px;
+        cursor:pointer;
+    }
 
-.ai-message{
-    background:white;
-    color:#333;
-    padding:13px 15px;
-    border-radius:16px 16px 16px 0;
-    max-width:85%;
-    align-self:flex-start;
-    font-size:14px;
-    line-height:1.7;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
+    .faq-btn:hover{
+        background:#F3C623;
+    }
 
-.ai-message strong{
-    color:#0D0F2B;
-}
+    #chatForm{
+        display:flex;
+        border-top:1px solid #e0d8a8;
+        background:white;
+        padding:10px;
+        gap:8px;
+    }
 
-.typing-message{
-    background:white;
-    color:#777;
-    padding:12px 15px;
-    border-radius:16px 16px 16px 0;
-    max-width:75%;
-    align-self:flex-start;
-    font-size:14px;
-    font-style:italic;
-}
+    #chatInput{
+        flex:1;
+        border:none;
+        outline:none;
+        padding:12px;
+        font-size:14px;
+        border-radius:12px;
+        background:#f3f3f3;
+        min-width: 0;
+    }
 
-.faq-box{
-    background:white;
-    border-radius:15px;
-    padding:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
+    #chatForm button{
+        background:#0D0F2B;
+        color:white;
+        border:none;
+        width:52px;
+        border-radius:12px;
+        font-size:18px;
+        cursor:pointer;
+        flex: 0 0 52px;
+    }
 
-.faq-title{
-    font-weight:700;
-    color:#0D0F2B;
-    margin-bottom:10px;
-    font-size:14px;
-}
+    #chatForm button:hover{
+        background:#F3C623;
+        color:#0D0F2B;
+    }
 
-.faq-btn{
-    display:block;
-    width:100%;
-    border:none;
-    background:#fff3b0;
-    color:#0D0F2B;
-    text-align:left;
-    padding:9px 11px;
-    border-radius:10px;
-    margin-bottom:7px;
-    font-size:13px;
-    cursor:pointer;
-}
+    #quickQuestions{
+        padding:10px;
+        display:flex;
+        gap:8px;
+        overflow-x:auto;
+        overflow-y:hidden;
+        white-space:nowrap;
+        background:#fff8dc;
+        border-top:1px solid #eee;
+        scrollbar-width:none;
+    }
 
-.faq-btn:hover{
-    background:#F3C623;
-}
+    #quickQuestions::-webkit-scrollbar{
+        display:none;
+    }
 
-#chatForm{
-    display:flex;
-    border-top:1px solid #e0d8a8;
-    background:white;
-    padding:10px;
-    gap:8px;
-}
+    .quick-btn{
+        flex:0 0 auto;
+        border:none;
+        background:#F3C623;
+        color:#0D0F2B;
+        border-radius:20px;
+        padding:10px 15px;
+        font-size:12px;
+        font-weight:600;
+        cursor:pointer;
+        transition:.3s;
+    }
 
-#chatInput{
-    flex:1;
-    border:none;
-    outline:none;
-    padding:12px;
-    font-size:14px;
-    border-radius:12px;
-    background:#f3f3f3;
-}
+    .quick-btn:hover{
+        background:#0D0F2B;
+        color:white;
+    }
 
-#chatForm button{
-    background:#0D0F2B;
-    color:white;
-    border:none;
-    width:52px;
-    border-radius:12px;
-    font-size:18px;
-    cursor:pointer;
-}
+    @keyframes fadeIn{
+        from{
+            opacity:0;
+            transform:translateY(8px);
+        }
+        to{
+            opacity:1;
+            transform:translateY(0);
+        }
+    }
 
-#chatForm button:hover{
-    background:#F3C623;
-    color:#0D0F2B;
-}
+    @media (max-width: 768px) {
+        body {
+            padding: 60px 0 120px 0;
+        }
 
+        .hero {
+            padding: 95px 15px;
+            background-size: cover;
+        }
 
-#quickQuestions{
-    padding:10px;
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    overflow-y:hidden;
-    white-space:nowrap;
-    background:#fff8dc;
-    border-top:1px solid #eee;
-    scrollbar-width:none;
-}
+        .hero h1 {
+            font-size: 2.1rem;
+            line-height: 1.2;
+        }
 
-#quickQuestions::-webkit-scrollbar{
-    display:none;
-}
+        .hero p {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            padding: 0 10px;
+        }
 
-.quick-btn{
-    flex:0 0 auto;
-    border:none;
-    background:#F3C623;
-    color:#0D0F2B;
-    border-radius:20px;
-    padding:10px 15px;
-    font-size:12px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s;
-}
+        .why-us {
+            padding: 55px 15px;
+        }
 
-.quick-btn:hover{
-    background:#0D0F2B;
-    color:white;
-}
+        .why-us h2 {
+            font-size: 1.6rem;
+        }
 
-/* ANIMATION */
-@keyframes fadeIn{
-from{
-opacity:0;
-transform:translateY(8px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
+        .why-us h1 {
+            font-size: 1.45rem;
+            line-height: 1.4;
+        }
+
+        .why-us p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .why-us .btn-outline-gold {
+            display: block;
+            width: 100%;
+            max-width: 280px;
+            margin: 10px auto;
+            padding: 10px 15px;
+        }
+
+        #orderModal .modal-dialog {
+            margin: 10px;
+        }
+
+        #orderModal .modal-body {
+            padding: 18px !important;
+        }
+
+        #boxTambahan .d-flex {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 8px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        #boxTambahan input {
+            width: 100% !important;
+        }
+
+        #pay-button {
+            width: 100%;
+        }
+
+        .portfolio-img-wrapper {
+            height: 230px;
+        }
+
+        #portfolio h2 {
+            font-size: 1.6rem;
+        }
+
+        .modal-dialog.modal-xl {
+            margin: 10px;
+        }
+
+        .modal-body .p-3 {
+            padding: 10px !important;
+        }
+
+        .carousel-item img {
+            max-height: 220px !important;
+        }
+
+        .col-md-6.d-flex.flex-column.justify-content-center.p-4 {
+            padding: 18px !important;
+        }
+
+        #testimoni h2 {
+            font-size: 1.6rem;
+        }
+
+        #testimoni .card-body {
+            padding: 15px;
+        }
+
+        #carouselTestimoni {
+            padding-bottom: 60px;
+        }
+
+        #carouselTestimoni .carousel-control-prev {
+            left: calc(50% - 55px);
+        }
+
+        #carouselTestimoni .carousel-control-next {
+            right: calc(50% - 55px);
+        }
+
+        #carouselTestimoni .carousel-control-prev,
+        #carouselTestimoni .carousel-control-next {
+            width: 45px;
+            height: 45px;
+        }
+
+        .wa-button {
+            bottom: 15px;
+            right: 12px;
+        }
+
+        .wa-button img {
+            width: 95px;
+        }
+
+        #chatBubble {
+            width: 55px;
+            height: 55px;
+            font-size: 24px;
+            bottom: 80px;
+            right: 15px;
+        }
+
+        #chatContainer {
+            width: 94%;
+            max-width: none;
+            height: 75vh;
+            max-height: none;
+            right: 3%;
+            left: 3%;
+            bottom: 90px;
+            border-radius: 18px;
+        }
+
+        .chat-header {
+            padding: 13px 14px;
+            font-size: 15px;
+        }
+
+        #chatMessages {
+            padding: 12px;
+        }
+
+        .user-message,
+        .ai-message,
+        .typing-message {
+            font-size: 13px;
+            max-width: 90%;
+        }
+
+        .quick-btn {
+            font-size: 11px;
+            padding: 9px 12px;
+        }
+
+        #chatInput {
+            font-size: 13px;
+            padding: 10px;
+        }
+
+        #chatForm button {
+            width: 46px;
+            flex: 0 0 46px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero h1 {
+            font-size: 1.75rem;
+        }
+
+        .hero p {
+            font-size: 0.95rem;
+        }
+
+        .why-us h1 {
+            font-size: 1.25rem;
+        }
+
+        .why-us h2 {
+            font-size: 1.35rem;
+        }
+
+        .portfolio-img-wrapper {
+            height: 210px;
+        }
+
+        .bg-white.p-4.rounded-4.shadow-sm {
+            padding: 18px !important;
+        }
+    }
     </style>
 </head>
 
@@ -452,13 +639,11 @@ transform:translateY(0);
     ");
     ?>
 
-    <!-- Hero Section -->
     <section class="hero">
         <h1>SYF_WEDDINGPLANNERS</h1>
         <p>Because it’s your wedding, every detail matters.</p>
     </section>
 
-    <!-- WHY US Section -->
     <section class="why-us">
         <h2>KENAPA KITA?</h2>
         <h1>Karena ini adalah pernikahanmu, setiap detail itu penting.</h1>
@@ -483,7 +668,7 @@ transform:translateY(0);
             <a href="pricelist.php" class="btn btn-outline-gold">DAFTAR HARGA →</a>
         </div>
     </section>
-    <!-- Modal Pemesanan -->
+
     <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 rounded-4">
@@ -494,7 +679,6 @@ transform:translateY(0);
                 </div>
                 <div class="modal-body p-4">
                     <form action="" method="post" id="formPesanan">
-                        <!-- Simulasi session -->
                         <input type="hidden" name="idPelanggan" value="<?= $_SESSION['ses_id'] ?>">
 
                         <?php
@@ -525,7 +709,6 @@ transform:translateY(0);
                                 readonly>
                         </div>
 
-                        <!-- Input ID Paket -->
                         <div class="mb-3">
                             <label for="idPaket" class="form-label">Pilih Paket</label>
                             <?php
@@ -602,7 +785,6 @@ transform:translateY(0);
                             <input type="date" class="form-control" name="tanggalPesan" required>
                         </div>
 
-                        <!-- Metode Pembayaran -->
                         <div class="mb-3">
                             <label for="metodePembayaran" class="form-label">Metode Pembayaran</label>
                             <select class="form-select" name="metodePembayaran" id="metodePembayaran" required>
@@ -611,15 +793,12 @@ transform:translateY(0);
                             </select>
                         </div>
 
-                        <!-- Input Tersembunyi -->
                         <input type="hidden" name="jumlahPembayaran" id="jumlahPembayaran">
 
-                        <!-- Harga yang ditampilkan -->
                         <div class="mb-3 text-end">
                             <strong>Total Pembayaran: <span id="hargaTampil">Rp 0</span></strong>
                         </div>
 
-                        <!-- Tombol Submit -->
                         <div class="text-end">
                             <button id="pay-button" class="btn btn-maroon text-white">Bayar Sekarang</button>
                         </div>
@@ -837,7 +1016,6 @@ transform:translateY(0);
             </div>
 
             <div class="row g-4">
-                <!-- Portfolio Card -->
                 <div class="col-md-6 col-lg-4">
                     <div class="card border-0 shadow-lg overflow-hidden rounded-4" data-bs-toggle="modal"
                         data-bs-target="#portfolioModal1">
@@ -881,7 +1059,6 @@ transform:translateY(0);
         </div>
     </section>
 
-    <!-- Modal 1 -->
     <div class="modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1Label"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -893,10 +1070,8 @@ transform:translateY(0);
                 </div>
                 <div class="modal-body">
                     <div class="row g-0">
-                        <!-- Gambar dengan Carousel dan Padding -->
                         <div class="col-md-6">
                             <div class="p-3">
-                                <!-- Padding semua sisi -->
                                 <div id="portfolioCarousel1" class="carousel slide rounded" data-bs-ride="carousel">
                                     <div class="carousel-inner rounded-3">
                                         <div class="carousel-item active">
@@ -924,7 +1099,6 @@ transform:translateY(0);
                             </div>
                         </div>
 
-                        <!-- Deskripsi -->
                         <div class="col-md-6 d-flex flex-column justify-content-center p-4">
                             <div>
                                 <h4 class="fw-bold">Adat Sunda Modern</h4>

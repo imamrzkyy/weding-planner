@@ -46,6 +46,41 @@ $pesanan = $conn->query("
 include 'header_adm.php';
 ?>
 
+<style>
+@media (max-width: 768px){
+
+    .modal-dialog{
+        margin: 10px !important;
+    }
+
+    .modal-content{
+        max-height: 90vh;
+        overflow: hidden;
+    }
+
+    .modal-body{
+        overflow-y: auto;
+        max-height: calc(90vh - 80px);
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-header{
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #0D0F28 !important;
+    }
+
+    .btn-close{
+        padding: 15px !important;
+    }
+
+    table .btn{
+        margin-bottom: 4px;
+    }
+}
+</style>
+
 <section id="pesanan">
 
     <div class="card border-0 shadow-sm mb-4" style="border-radius:20px; overflow:hidden;">
@@ -200,9 +235,11 @@ include 'header_adm.php';
                         <!-- MODAL DETAIL -->
                         <div class="modal fade"
                              id="detailModal<?= $ps['id'] ?>"
-                             tabindex="-1">
+                             tabindex="-1"
+                             data-bs-backdrop="true"
+                             data-bs-keyboard="true">
 
-                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 
                                 <div class="modal-content border-0 shadow">
 
@@ -214,7 +251,8 @@ include 'header_adm.php';
 
                                         <button type="button"
                                                 class="btn-close btn-close-white"
-                                                data-bs-dismiss="modal">
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close">
                                         </button>
 
                                     </div>
