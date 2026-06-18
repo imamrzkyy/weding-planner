@@ -85,7 +85,7 @@ $companyInfo
    REQUEST DATA
 ========================= */
 $data = [
-    "model" => "deepseek-ai/deepseek-v4-flash",
+    "model" => "deepseek-ai/deepseek-v4-pro",
     "messages" => [
         [
             "role" => "system",
