@@ -5,51 +5,30 @@ services:
     ports:
       - "${APP_PORT:-8080}:80"
     environment:
-      DB_HOST: mysql
+      DB_HOST: infra-mysql
       DB_PORT: 3306
       DB_DATABASE: ${MYSQL_DATABASE}
       DB_USERNAME: ${MYSQL_USER}
       DB_PASSWORD: ${MYSQL_PASSWORD}
-    depends_on:
-      mysql:
-        condition: service_healthy
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     restart: unless-stopped
     networks:
       - wedding-planner-network
-
-  mysql:
-    image: mysql:8.4
-    container_name: wedding-planner-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./mysql-init:/docker-entrypoint-initdb.d:ro
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    restart: unless-stopped
-    networks:
-      - wedding-planner-network
+      - db-shared
 
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: wedding-planner-cloudflared
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
+    command: ["tunnel", "--no-autoupdate", "run", "--token", "${CLOUDFLARED_TOKEN}"]
     depends_on:
       - app
     restart: unless-stopped
     networks:
       - wedding-planner-network
 
-volumes:
-  mysql_data:
-
 networks:
   wedding-planner-network:
     driver: bridge
+  db-shared:
+    external: true
+    name: db-shared

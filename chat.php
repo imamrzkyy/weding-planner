@@ -5,8 +5,7 @@
 ========================= */
 $env = parse_ini_file('.env');
 
-$apiKey = $env['GEMINI_API_KEY'];
-
+$apiKey = $_ENV['GEMINI_API_KEY'] ?? getenv('GEMINI_API_KEY') ?: null;
 /* =========================
    AMBIL PESAN USER
 ========================= */
