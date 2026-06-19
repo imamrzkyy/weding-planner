@@ -3,15 +3,12 @@ include 'config.php';
 
 if (isset($_GET['hapus_pesanan'])) {
     $id = (int)$_GET['hapus_pesanan'];
-
     $conn->query("DELETE FROM pesanan WHERE id='$id'");
-
     header("Location: pesanan_adm.php");
     exit;
 }
 
 if (isset($_GET['selesai_pesanan'])) {
-
     $id = (int)$_GET['selesai_pesanan'];
 
     date_default_timezone_set('Asia/Jakarta');
@@ -36,10 +33,8 @@ $pesanan = $conn->query("
         pl.nama AS namaPelanggan,
         pk.namaPaket
     FROM pesanan p
-    LEFT JOIN pelanggan pl
-        ON p.idPelanggan = pl.idPelanggan
-    LEFT JOIN paketpernikahan pk
-        ON p.idPaket = pk.idPaket
+    LEFT JOIN pelanggan pl ON p.idPelanggan = pl.idPelanggan
+    LEFT JOIN paketpernikahan pk ON p.idPaket = pk.idPaket
     ORDER BY p.id DESC
 ");
 
@@ -48,7 +43,6 @@ include 'header_adm.php';
 
 <style>
 @media (max-width: 768px){
-
     .modal-dialog{
         margin: 10px !important;
     }
@@ -68,7 +62,6 @@ include 'header_adm.php';
         position: sticky;
         top: 0;
         z-index: 10;
-        background: #0D0F28 !important;
     }
 
     .btn-close{
@@ -96,7 +89,6 @@ include 'header_adm.php';
                 <table class="table table-hover align-middle">
 
                     <thead style="background:#f8fafc;">
-
                         <tr>
                             <th>ID</th>
                             <th>Nama</th>
@@ -106,7 +98,6 @@ include 'header_adm.php';
                             <th width="260">Aksi</th>
                             <th class="text-center">Tambahan</th>
                         </tr>
-
                     </thead>
 
                     <tbody>
@@ -114,8 +105,8 @@ include 'header_adm.php';
                     <?php while($ps = $pesanan->fetch_assoc()): ?>
 
                         <?php
-                        $statusPembayaran = strtolower(trim($ps['metodePembayaran']?? ''));
-                        $statusPesanan = strtolower(trim($ps['statusPesanan']?? ''));
+                        $statusPembayaran = strtolower(trim($ps['metodePembayaran'] ?? ''));
+                        $statusPesanan = strtolower(trim($ps['statusPesanan'] ?? ''));
                         ?>
 
                         <tr style="border-bottom:1px solid #f1f5f9;">
@@ -181,6 +172,7 @@ include 'header_adm.php';
                                 <div class="d-flex align-items-center gap-2 flex-wrap">
 
                                     <button
+                                        type="button"
                                         class="btn btn-info btn-sm text-white"
                                         data-bs-toggle="modal"
                                         data-bs-target="#detailModal<?= $ps['id'] ?>">
@@ -189,19 +181,23 @@ include 'header_adm.php';
 
                                     <?php if ($statusPesanan != 'selesai'): ?>
 
-                                        <a href="?selesai_pesanan=<?= $ps['id'] ?>"
-                                           class="btn btn-success btn-sm"
-                                           onclick="return confirm('Pesanan selesai?')">
+                                        <button
+                                            type="button"
+                                            class="btn btn-success btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#selesaiModal<?= $ps['id'] ?>">
                                             Selesai
-                                        </a>
+                                        </button>
 
                                     <?php endif; ?>
 
-                                    <a href="?hapus_pesanan=<?= $ps['id'] ?>"
-                                       class="btn btn-danger btn-sm"
-                                       onclick="return confirm('Hapus pesanan?')">
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#hapusModal<?= $ps['id'] ?>">
                                         Hapus
-                                    </a>
+                                    </button>
 
                                 </div>
                             </td>
@@ -262,89 +258,181 @@ include 'header_adm.php';
                                         <div class="row">
 
                                             <div class="col-md-6 mb-3">
-                                                <label class="fw-bold">
-                                                    Nama Pelanggan
-                                                </label>
-                                                <div>
-                                                    <?= $ps['namaPelanggan'] ?? '-' ?>
-                                                </div>
+                                                <label class="fw-bold">Nama Pelanggan</label>
+                                                <div><?= $ps['namaPelanggan'] ?? '-' ?></div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label class="fw-bold">
-                                                    Paket Wedding
-                                                </label>
-                                                <div>
-                                                    <?= $ps['namaPaket'] ?? $ps['idPaket'] ?>
-                                                </div>
+                                                <label class="fw-bold">Paket Wedding</label>
+                                                <div><?= $ps['namaPaket'] ?? $ps['idPaket'] ?></div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label class="fw-bold">
-                                                    Tanggal Acara
-                                                </label>
-                                                <div>
-                                                    <?= $ps['tanggalPesan'] ?>
-                                                </div>
+                                                <label class="fw-bold">Tanggal Acara</label>
+                                                <div><?= $ps['tanggalPesan'] ?></div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label class="fw-bold">
-                                                    Metode Pembayaran
-                                                </label>
-                                                <div>
-                                                    <?= $ps['metodePembayaran'] ?>
-                                                </div>
+                                                <label class="fw-bold">Metode Pembayaran</label>
+                                                <div><?= $ps['metodePembayaran'] ?></div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label class="fw-bold">
-                                                    Status Pesanan
-                                                </label>
-
+                                                <label class="fw-bold">Status Pesanan</label>
                                                 <div>
                                                     <?php
                                                     if ($statusPembayaran == 'dp') {
-                                                        echo '
-                                                        <span class="badge bg-warning text-dark px-3 py-2">
-                                                            DP
-                                                        </span>';
+                                                        echo '<span class="badge bg-warning text-dark px-3 py-2">DP</span>';
                                                     } elseif ($statusPesanan == 'selesai') {
-                                                        echo '
-                                                        <span class="badge bg-success px-3 py-2">
-                                                            Selesai
-                                                        </span>';
+                                                        echo '<span class="badge bg-success px-3 py-2">Selesai</span>';
                                                     } else {
-                                                        echo '
-                                                        <span class="badge bg-primary px-3 py-2">
-                                                            Masih Diproses
-                                                        </span>';
+                                                        echo '<span class="badge bg-primary px-3 py-2">Masih Diproses</span>';
                                                     }
                                                     ?>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label class="fw-bold">
-                                                    Total Pembayaran
-                                                </label>
-
+                                                <label class="fw-bold">Total Pembayaran</label>
                                                 <div class="fw-bold text-success">
                                                     Rp <?= number_format($ps['jumlahPembayaran'],0,',','.') ?>
                                                 </div>
                                             </div>
 
                                             <div class="col-12">
-                                                <label class="fw-bold mb-1">
-                                                    Tambahan
-                                                </label>
-
+                                                <label class="fw-bold mb-1">Tambahan</label>
                                                 <div class="border rounded p-3 bg-light">
                                                     <?= nl2br($ps['Tambahan'] ?? 'Tidak ada tambahan') ?>
                                                 </div>
                                             </div>
 
                                         </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- MODAL SELESAI -->
+                        <div class="modal fade"
+                             id="selesaiModal<?= $ps['id'] ?>"
+                             tabindex="-1">
+
+                            <div class="modal-dialog modal-dialog-centered">
+
+                                <div class="modal-content border-0 shadow">
+
+                                    <div class="modal-header bg-success text-white">
+
+                                        <h5 class="modal-title">
+                                            Konfirmasi Pesanan Selesai
+                                        </h5>
+
+                                        <button type="button"
+                                                class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal-body text-center p-4">
+
+                                        <i class="fas fa-check-circle text-success mb-3"
+                                           style="font-size:55px;"></i>
+
+                                        <h5 class="fw-bold">
+                                            Pesanan ini sudah selesai?
+                                        </h5>
+
+                                        <p class="mb-0 mt-2">
+                                            ID Pesanan #<?= $ps['id'] ?>
+                                        </p>
+
+                                        <p class="text-muted mt-2 mb-0">
+                                            Status pembayaran akan diubah menjadi Lunas.
+                                        </p>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button type="button"
+                                                class="btn btn-secondary"
+                                                data-bs-dismiss="modal">
+                                            Batal
+                                        </button>
+
+                                        <a href="?selesai_pesanan=<?= $ps['id'] ?>"
+                                           class="btn btn-success">
+                                            Ya, Selesaikan
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- MODAL HAPUS -->
+                        <div class="modal fade"
+                             id="hapusModal<?= $ps['id'] ?>"
+                             tabindex="-1">
+
+                            <div class="modal-dialog modal-dialog-centered">
+
+                                <div class="modal-content border-0 shadow">
+
+                                    <div class="modal-header bg-danger text-white">
+
+                                        <h5 class="modal-title">
+                                            Konfirmasi Hapus Pesanan
+                                        </h5>
+
+                                        <button type="button"
+                                                class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal-body text-center p-4">
+
+                                        <i class="fas fa-trash-alt text-danger mb-3"
+                                           style="font-size:55px;"></i>
+
+                                        <h5 class="fw-bold">
+                                            Yakin ingin menghapus pesanan ini?
+                                        </h5>
+
+                                        <p class="mb-0 mt-2">
+                                            ID Pesanan #<?= $ps['id'] ?>
+                                        </p>
+
+                                        <p class="text-muted mt-2 mb-0">
+                                            Data pesanan yang dihapus tidak bisa dikembalikan.
+                                        </p>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button type="button"
+                                                class="btn btn-secondary"
+                                                data-bs-dismiss="modal">
+                                            Batal
+                                        </button>
+
+                                        <a href="?hapus_pesanan=<?= $ps['id'] ?>"
+                                           class="btn btn-danger">
+                                            Ya, Hapus
+                                        </a>
 
                                     </div>
 
@@ -367,5 +455,17 @@ include 'header_adm.php';
     </div>
 
 </section>
+
+<script>
+document.addEventListener('hidden.bs.modal', function () {
+    document.querySelectorAll('.modal-backdrop').forEach(function (el) {
+        el.remove();
+    });
+
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+});
+</script>
 
 <?php include 'footer_adm.php'; ?>

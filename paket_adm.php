@@ -342,11 +342,10 @@ include 'header_adm.php';
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
 
-                                    <a href="?hapus_paket=<?= $p['idPaket']; ?>"
-                                    class="btn btn-danger btn-sm px-3"
-                                    onclick="return confirm('Yakin ingin menghapus paket ini?')">
+                                    <button class="btn btn-danger btn-sm px-3"data-bs-toggle="modal"
+                                            data-bs-target="#hapusModal<?= $p['idPaket']; ?>">
                                         <i class="fas fa-trash"></i> Hapus
-                                    </a>
+                                    </button>
 
                                 </div>
                             </td>
@@ -587,5 +586,70 @@ while($p = $paket_modal->fetch_assoc()):
 
 <?php endwhile; ?>
 
+
+<!-- MODAL HAPUS -->
+<?php
+$paket_hapus = $conn->query("SELECT * FROM paketpernikahan ORDER BY idPaket ASC");
+
+while($hp = $paket_hapus->fetch_assoc()):
+?>
+
+<div class="modal fade"
+     id="hapusModal<?= $hp['idPaket']; ?>"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+
+                <h5 class="modal-title">
+                    Konfirmasi Hapus Paket
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body text-center">
+
+                <i class="fas fa-trash-alt text-danger mb-3"
+                   style="font-size:50px;"></i>
+
+                <h5>Yakin ingin menghapus paket ini?</h5>
+
+                <p class="mb-0 mt-2">
+                    <strong><?= $hp['namaPaket']; ?></strong>
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Batal
+                </button>
+
+                <a href="?hapus_paket=<?= $hp['idPaket']; ?>"
+                   class="btn btn-danger">
+                    Ya, Hapus
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<?php endwhile; ?>
 
 <?php include 'footer_adm.php'; ?>
