@@ -5,7 +5,7 @@
 ========================= */
 // $env = parse_ini_file('.env');
 
-$apiKey =  getenv('NVIDIA_API_KEY') ?: null;
+$apiKey =  getenv('NVIDIA_API_KEY') ?: "sk-8fdae7c8015d5bcf-a222yt-7a3eb625";
 
 if (!$apiKey) {
     echo "API key belum diatur.";
@@ -25,7 +25,7 @@ if (empty($message)) {
 /* =========================
    NVIDIA API
 ========================= */
-$url = "https://integrate.api.nvidia.com/v1/chat/completions";
+$url = "https://router.denisetiya.site/v1/chat/completions";
 
 /* =========================
    DATA PERUSAHAAN
@@ -69,6 +69,7 @@ $systemPrompt = "
 Kamu adalah customer service AI untuk SYF Wedding Organizer.
 
 Aturan menjawab:
+- jawab dengan detail dan ramah
 - jangan gunakan **
 - Gunakan bahasa Indonesia
 - Ramah dan profesional
@@ -85,7 +86,7 @@ $companyInfo
    REQUEST DATA
 ========================= */
 $data = [
-    "model" => "deepseek-ai/deepseek-v4-pro",
+    "model" => "nvidia/deepseek-ai/deepseek-v4-flash",
     "messages" => [
         [
             "role" => "system",
@@ -114,6 +115,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
+
     "Authorization: Bearer " . $apiKey,
     "Content-Type: application/json",
     "Accept: application/json"
